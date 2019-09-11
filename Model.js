@@ -150,8 +150,8 @@ export default class Model {
   setSavedValues(update = false) {
     if (!update) {
       return Object.assign(
-          this.modelItems(Date.now()),
-          Object.assign({}, this.format())
+        this.modelItems(Date.now()),
+        Object.assign({}, this.format())
       );
     }
 
@@ -166,12 +166,12 @@ export default class Model {
    */
   sendEmail(email) {
     return this.firebase
-        .auth()
-        .sendPasswordResetEmail(email)
-        .catch((err) => {
-          this.triggerToast(err.message);
-          throw err.message;
-        });
+      .auth()
+      .sendPasswordResetEmail(email)
+      .catch(err => {
+        this.triggerToast(err.message);
+        throw err.message;
+      });
   }
 
   /**
@@ -199,7 +199,7 @@ export default class Model {
   populateReplication(firebaseKey, list) {
     if (!firebaseKey) return '';
 
-    const itemData = list.find((item) => {
+    const itemData = list.find(item => {
       return firebaseKey === item.id;
     });
 
@@ -222,12 +222,43 @@ export default class Model {
   }
 
   /**
+   * Checks the list of items in a dropdown so the correct
+   * selected value is returned
+   * @param {Object} value Firebase Object
+   * @param {Array} options Dropdown options
+   * @return {String} Firebase Key
+   */
+  selectDropdownValue(value, options) {
+    if (!options) return null;
+    if (!value) return null;
+    let key = null;
+    key = options.find(option => {
+      return option.id === value.id;
+    });
+    return !key ? null : key.id;
+  }
+
+  /**
+   * @param {Object} snapshot Firebase snapshot
+   * @return {Array} list
+   */
+  getList(snapshot) {
+    let list = [];
+    snapshot.forEach(doc => {
+      list.push({
+        id: doc.id,
+        data: doc.data(),
+      });
+    });
+    return list;
+  }
+  /**
    * @param {Array} snapshotList the pre-formatted list
    * @return {Array} formatted snapshots list
    */
   formatSnapshot(snapshotList) {
     let formattedSnapshots = [];
-    snapshotList.forEach((snapshot) => {
+    snapshotList.forEach(snapshot => {
       formattedSnapshots.push(this.format(snapshot));
     });
     return formattedSnapshots;
