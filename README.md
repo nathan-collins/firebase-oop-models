@@ -1,5 +1,7 @@
 ## Firebase OOP Model
 
+Not ready for any usage
+
 This is still being tidied up from production code and needs to be altered for reusability
 
 TODO
