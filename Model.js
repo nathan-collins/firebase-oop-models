@@ -97,20 +97,6 @@ export default class Model {
   }
 
   /**
-   * @param {String} message message
-   */
-  triggerToast(message) {
-    window.dispatchEvent(
-        new CustomEvent('set-toast', {
-          composed: true,
-          detail: {
-            message: message,
-          },
-        })
-    );
-  }
-
-  /**
    *
    * @param {Object} createdAt Previous createdAt
    * @return {Object} Additional timestamp values
@@ -164,8 +150,8 @@ export default class Model {
   setSavedValues(update = false) {
     if (!update) {
       return Object.assign(
-          this.modelItems(Date.now()),
-          Object.assign({}, this.format())
+        this.modelItems(Date.now()),
+        Object.assign({}, this.format())
       );
     }
 
@@ -175,28 +161,17 @@ export default class Model {
   }
 
   /**
-   * @param {Array} collection Collection
-   * @return {String} Id number
-   */
-  checkForId(collection) {
-    if (collection && collection.$id) {
-      return collection.$id;
-    }
-    return '';
-  }
-
-  /**
    * @param {String} email Email address
    * @return {Object} Object
    */
   sendEmail(email) {
     return this.firebase
-        .auth()
-        .sendPasswordResetEmail(email)
-        .catch((err) => {
-          this.triggerToast(err.message);
-          throw err.message;
-        });
+      .auth()
+      .sendPasswordResetEmail(email)
+      .catch(err => {
+        this.triggerToast(err.message);
+        throw err.message;
+      });
   }
 
   /**
@@ -224,7 +199,7 @@ export default class Model {
   populateReplication(firebaseKey, list) {
     if (!firebaseKey) return '';
 
-    const itemData = list.find((item) => {
+    const itemData = list.find(item => {
       return firebaseKey === item.id;
     });
 
@@ -257,21 +232,10 @@ export default class Model {
     if (!options) return null;
     if (!value) return null;
     let key = null;
-    key = options.find((option) => {
+    key = options.find(option => {
       return option.id === value.id;
     });
     return !key ? null : key.id;
-  }
-
-  /**
-   * @param {Array} values Values
-   * @return {Array} values
-   */
-  selectMultipleValues(values) {
-    if (!values) return null;
-    return values.map((value) => {
-      return Object.keys(value)[0];
-    });
   }
 
   /**
@@ -280,7 +244,7 @@ export default class Model {
    */
   getList(snapshot) {
     let list = [];
-    snapshot.forEach((doc) => {
+    snapshot.forEach(doc => {
       list.push({
         id: doc.id,
         data: doc.data(),
@@ -294,7 +258,7 @@ export default class Model {
    */
   formatSnapshot(snapshotList) {
     let formattedSnapshots = [];
-    snapshotList.forEach((snapshot) => {
+    snapshotList.forEach(snapshot => {
       formattedSnapshots.push(this.format(snapshot));
     });
     return formattedSnapshots;
