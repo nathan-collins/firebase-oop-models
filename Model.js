@@ -97,20 +97,6 @@ export default class Model {
   }
 
   /**
-   * @param {String} message message
-   */
-  triggerToast(message) {
-    window.dispatchEvent(
-        new CustomEvent('set-toast', {
-          composed: true,
-          detail: {
-            message: message,
-          },
-        })
-    );
-  }
-
-  /**
    *
    * @param {Object} createdAt Previous createdAt
    * @return {Object} Additional timestamp values
@@ -175,17 +161,6 @@ export default class Model {
   }
 
   /**
-   * @param {Array} collection Collection
-   * @return {String} Id number
-   */
-  checkForId(collection) {
-    if (collection && collection.$id) {
-      return collection.$id;
-    }
-    return '';
-  }
-
-  /**
    * @param {String} email Email address
    * @return {Object} Object
    */
@@ -246,48 +221,6 @@ export default class Model {
     return formData;
   }
 
-  /**
-   * Checks the list of items in a dropdown so the correct
-   * selected value is returned
-   * @param {Object} value Firebase Object
-   * @param {Array} options Dropdown options
-   * @return {String} Firebase Key
-   */
-  selectDropdownValue(value, options) {
-    if (!options) return null;
-    if (!value) return null;
-    let key = null;
-    key = options.find((option) => {
-      return option.id === value.id;
-    });
-    return !key ? null : key.id;
-  }
-
-  /**
-   * @param {Array} values Values
-   * @return {Array} values
-   */
-  selectMultipleValues(values) {
-    if (!values) return null;
-    return values.map((value) => {
-      return Object.keys(value)[0];
-    });
-  }
-
-  /**
-   * @param {Object} snapshot Firebase snapshot
-   * @return {Array} list
-   */
-  getList(snapshot) {
-    let list = [];
-    snapshot.forEach((doc) => {
-      list.push({
-        id: doc.id,
-        data: doc.data(),
-      });
-    });
-    return list;
-  }
   /**
    * @param {Array} snapshotList the pre-formatted list
    * @return {Array} formatted snapshots list
