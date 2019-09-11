@@ -12,12 +12,9 @@ export default class Model {
     }
     this.currentUser = this.getUserData(this.firebase.auth().currentUser);
 
-    this.groupsTable = 'groups';
-    this.tableFiller = 'items';
-    this.sitesTable = 'sites';
-    this.warehouseTable = 'warehouses';
-    this.settingsTable = 'settings';
-    this.attributesTable = 'attributes';
+    /**
+     * Table that are shared over multiple models
+     */
   }
 
   /**
