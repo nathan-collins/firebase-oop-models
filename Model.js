@@ -1,3 +1,8 @@
+// Nodejs
+const config = require('./demo/config');
+// Client script
+// import config from './demo/config.js';
+
 /**
  */
 export default class Model {
@@ -10,10 +15,11 @@ export default class Model {
     } else {
       this.firestore = this.firebase.firestore();
     }
+    // store the current user details
     this.currentUser = this.getUserData(this.firebase.auth().currentUser);
 
     /**
-     * Table that are shared over multiple models
+     * Tables that are shared over multiple models
      */
   }
 
@@ -21,15 +27,14 @@ export default class Model {
    * @return {Object} config;
    */
   config() {
-    const environment = window.settings.environment;
+    const environment = config.environment;
     return {
-      apiKey: window.firebaseConnection[environment].apiKey,
-      authDomain: window.firebaseConnection[environment].authDomain,
-      databaseURL: window.firebaseConnection[environment].databaseURL,
-      projectId: window.firebaseConnection[environment].projectId,
-      storageBucket: window.firebaseConnection[environment].storageBucket,
-      messagingSenderId:
-        window.firebaseConnection[environment].messagingSenderId,
+      apiKey: config.firebase[environment].apiKey,
+      authDomain: config.firebase[environment].authDomain,
+      databaseURL: config.firebase[environment].databaseURL,
+      projectId: config.firebase[environment].projectId,
+      storageBucket: config.firebase[environment].storageBucket,
+      messagingSenderId: config.firebase[environment].messagingSenderId,
     };
   }
 
@@ -144,7 +149,7 @@ export default class Model {
    * @param {Function} update Update
    * @return {Object} Saved value
    */
-  setSavedValues(update = false) {
+  setStoredValues(update = false) {
     if (!update) {
       return Object.assign(
         this.modelItems(Date.now()),
@@ -181,29 +186,6 @@ export default class Model {
       return false;
     }
     return true;
-  }
-
-  /**
-   * @description a generic function which can find the object and copy all
-   *  fields except three fields(createdAt, createdBy, updates)
-   *  from the given list according to the firebaseKey.
-   *  And it can be reuse by all dropdown menus.
-   *
-   * @param {String} firebaseKey firebase push key
-   * @param {Array} list existed list
-   * @return {Object} existed object
-   */
-  populateReplication(firebaseKey, list) {
-    if (!firebaseKey) return '';
-
-    const itemData = list.find(item => {
-      return firebaseKey === item.id;
-    });
-
-    let data = {};
-    data.id = firebaseKey;
-
-    return Object.assign(data, itemData.data);
   }
 
   /**
@@ -249,6 +231,7 @@ export default class Model {
     });
     return list;
   }
+
   /**
    * @param {Array} snapshotList the pre-formatted list
    * @return {Array} formatted snapshots list
